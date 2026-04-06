@@ -1,3 +1,4 @@
+import 'package:chat_app/auth/auth_service.dart';
 import 'package:chat_app/components/buttons.dart';
 import 'package:chat_app/components/textfields.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,29 @@ class RegisterPage extends StatelessWidget {
 
   final TextEditingController _emailInputController = TextEditingController();
   final TextEditingController _pwInputController = TextEditingController();
-  final TextEditingController _confirmPwInputController = TextEditingController();
+  final TextEditingController _confirmPwInputController =
+      TextEditingController();
 
   //login method
-  void register() {
-    print("Register tried!");
-    //Authenticate user
+  void register(BuildContext context) async {
+    //Register user
+    final auth = AuthService();
+
+    try {
+      var user = await auth.signUp(
+        _emailInputController.text,
+        _pwInputController.text,
+      );
+
+      toggleLogin?.call();
+
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(icon: Icon(Icons.error), title: Text(e.toString())),
+      );
+    }
   }
 
   @override
@@ -65,7 +83,7 @@ class RegisterPage extends StatelessWidget {
 
             SizedBox(height: 25),
 
-            CustomButton(text: "Register", onTap: register),
+            CustomButton(text: "Register", onTap: () => register(context)),
 
             SizedBox(height: 25),
 

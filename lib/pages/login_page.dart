@@ -1,9 +1,9 @@
+import 'package:chat_app/auth/auth_service.dart';
 import 'package:chat_app/components/buttons.dart';
 import 'package:chat_app/components/textfields.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
-
   final void Function()? toggleRegister;
 
   LoginPage({super.key, required this.toggleRegister});
@@ -11,11 +11,23 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _emailInputController = TextEditingController();
   final TextEditingController _pwInputController = TextEditingController();
 
-
   //login method
-  void login() {
-    print("Login tried!");
+  void login(BuildContext context) async {
     //Authenticate user
+    var authService = AuthService();
+
+    try {
+      var credentials = await authService.signInWithEmailPassword(
+        _emailInputController.text,
+        _pwInputController.text,
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(icon: Icon(Icons.error), title: Text(e.toString())),
+      );
+    }
   }
 
   @override
@@ -57,7 +69,7 @@ class LoginPage extends StatelessWidget {
 
             SizedBox(height: 25),
 
-            CustomButton(text: "Login", onTap: login),
+            CustomButton(text: "Login", onTap: () => login(context)),
 
             SizedBox(height: 25),
 
