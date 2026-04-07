@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../auth/auth_service.dart';
+import '../pages/settings_page.dart';
+
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
+
+
+  void logout() async {
+    final auth = AuthService();
+    auth.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +18,6 @@ class MyDrawer extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
-          //
 
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,7 +37,9 @@ class MyDrawer extends StatelessWidget {
                 child: ListTile(
                   title: Text("H O M E"),
                   leading: Icon(Icons.home),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
 
@@ -38,10 +48,13 @@ class MyDrawer extends StatelessWidget {
                 child: ListTile(
                   title: Text("S E T T I N G S"),
                   leading: Icon(Icons.home),
-                  onTap: () {},
+                  onTap: () {
+                    
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+                    
+                  },
                 ),
               ),
-
             ],
           ),
 
@@ -50,7 +63,7 @@ class MyDrawer extends StatelessWidget {
             child: ListTile(
               title: Text("L O G O U T"),
               leading: Icon(Icons.home),
-              onTap: () {},
+              onTap: logout,
             ),
           ),
         ],
