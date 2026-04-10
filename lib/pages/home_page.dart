@@ -15,7 +15,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home")),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Home"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.grey,
+      ),
       drawer: MyDrawer(),
 
       body: _buildUserList(),
@@ -56,11 +62,13 @@ class HomePage extends StatelessWidget {
       return UserTile(
         username: userData['email'],
         onTap: () {
-          print("Navigate to chat...");
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChatPage(email: userData['email']),
+              builder: (context) => ChatPage(
+                email: userData['email'],
+                chatUserId: userData['uid'],
+              ),
             ),
           );
         },

@@ -6,7 +6,6 @@ import '../pages/settings_page.dart';
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
-
   void logout() async {
     final auth = AuthService();
     auth.signOut();
@@ -18,7 +17,6 @@ class MyDrawer extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
-
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -35,8 +33,16 @@ class MyDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 25),
                 child: ListTile(
-                  title: Text("H O M E"),
-                  leading: Icon(Icons.home),
+                  title: Text(
+                    "H O M E",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                  leading: Icon(
+                    Icons.home,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -46,12 +52,21 @@ class MyDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 25),
                 child: ListTile(
-                  title: Text("S E T T I N G S"),
-                  leading: Icon(Icons.home),
+                  title: Text(
+                    "S E T T I N G S",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                  leading: Icon(
+                    Icons.home,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
                   onTap: () {
-                    
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
-                    
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()),
+                    );
                   },
                 ),
               ),
@@ -61,8 +76,16 @@ class MyDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 25),
             child: ListTile(
-              title: Text("L O G O U T"),
-              leading: Icon(Icons.home),
+              title: Text(
+                "L O G O U T",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+              leading: Icon(
+                Icons.home,
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
               onTap: logout,
             ),
           ),
