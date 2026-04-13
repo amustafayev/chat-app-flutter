@@ -1,3 +1,4 @@
+import 'package:chat_app/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth/auth_service.dart';
@@ -53,6 +54,28 @@ class MyDrawer extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 25),
                 child: ListTile(
                   title: Text(
+                    "P R O F I L E",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                  leading: Icon(
+                    Icons.home,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AccountProfile()),
+                    );
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 25),
+                child: ListTile(
+                  title: Text(
                     "S E T T I N G S",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -83,7 +106,7 @@ class MyDrawer extends StatelessWidget {
                 ),
               ),
               leading: Icon(
-                Icons.home,
+                Icons.person,
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
               onTap: logout,
