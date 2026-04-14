@@ -1,4 +1,5 @@
 import 'package:chat_app/components/user_tile.dart';
+import 'package:chat_app/model/user.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/components/drawer.dart';
 import 'package:chat_app/services/chat/chat_services.dart';
@@ -53,21 +54,21 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildUserListItem(
-    Map<String, dynamic> userData,
+    UserDetailsDto userData,
     BuildContext context,
   ) {
     //display all users except current user
 
-    if (userData['email'] != _authService.getCurrentUser()!.email) {
+    if (userData.email != _authService.getCurrentUser()!.email) {
       return UserTile(
-        username: userData['email'],
+        username: userData.email,
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ChatPage(
-                email: userData['email'],
-                chatUserId: userData['uid'],
+                email: userData.email,
+                chatUserId: userData.userId,
               ),
             ),
           );

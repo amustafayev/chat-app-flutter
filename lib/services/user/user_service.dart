@@ -1,29 +1,59 @@
+import 'package:chat_app/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 
-class UserImageStorage {
-  //Firebase storage
-  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+class UserDetailsService {
+  static final USER_DETAILS_COLLECTION = 'user_details';
 
-  // loading status
-  bool isLoading = false;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  //uploading status
-  bool isUploading = false;
+  Future<UserDetailsDto> getUserDetails(String userId) async {
+    final snapshot = await _firestore
+        .collection(USER_DETAILS_COLLECTION)
+        .doc(userId)
+        .get();
 
-  //GETTERS
+    if (!snapshot.exists) {
+      throw Exception("User details not found with user id: $userId");
+    }
 
-  //Read Images
+    final data = snapshot.data() as Map<String, dynamic>;
 
-  Future<void> fetchImage() async {
-    //start loading
-    isLoading = true;
+    return UserDetailsDto(
+      userId: data['userId'],
+      profilePicUrl: data['profilePicUrl'],
+      name: data['name'],
+      email: data['email'],
+      bio: data['bio'],
+    );
   }
 
-  //Delete images
+  Future<void> saveUserDetails(UserDetailsDto userDetails) async {
+    _firestore
+        .collection(USER_DETAILS_COLLECTION)
+        .doc(userDetails.userId)
+        .set(userDetails.toMap());
+  }
 
-  //Delete
+  Stream<List<UserDetailsDto>> getUserList() {
+    return _firestore.collection(USER_DETAILS_COLLECTION).snapshots().map((
+      snapshot,
+    ) {
+      return snapshot.docs.map((doc) {
+        final user = UserDetailsDto(
+          userId: doc.data()['userId'],
+          email: doc.data()['email'],
+          profilePicUrl: doc.data()['profilePicUrl'],
+          name: doc.data()['name'],
+          bio: doc.data()['bio'],
+        );
+        return user;
+      }).toList();
+    });
+  }
 
-  //Upload images
+  Future<void> saveUserProfilePicture(String userId, String downloadUrl) async {
+    var userDetailsDto = await getUserDetails(userId);
+    userDetailsDto.profilePicUrl = downloadUrl;
+    await saveUserDetails(userDetailsDto);
+  }
 }

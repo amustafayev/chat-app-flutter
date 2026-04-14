@@ -15,11 +15,10 @@ class ImageDetails {
 }
 
 class LightImageDto {
-  final String id;
   final ImageType type;
   final String userId;
 
-  LightImageDto(this.id, this.type, this.userId);
+  LightImageDto(this.type, this.userId);
 }
 
 enum ImageType { userProfile, userBackground }

@@ -60,7 +60,7 @@ class MyDrawer extends StatelessWidget {
                     ),
                   ),
                   leading: Icon(
-                    Icons.home,
+                    Icons.person,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                   onTap: () {
@@ -106,7 +106,7 @@ class MyDrawer extends StatelessWidget {
                 ),
               ),
               leading: Icon(
-                Icons.person,
+                Icons.logout,
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
               onTap: logout,

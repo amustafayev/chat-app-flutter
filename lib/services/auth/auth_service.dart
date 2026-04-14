@@ -1,12 +1,13 @@
+import 'package:chat_app/model/user.dart';
+import 'package:chat_app/services/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+  final UserDetailsService _userDetailsService = UserDetailsService();
 
   //sign in
   Future<UserCredential> signInWithEmailPassword(String email, password) async {
@@ -34,11 +35,16 @@ class AuthService {
         password: password,
       );
 
-      firestore.collection('Users').doc(user.user!.uid).set({
-        'email': email,
-        'uid' : user.user!.uid,
-        'createdAt': DateTime.now(),
-      });
+      _userDetailsService.saveUserDetails(
+        UserDetailsDto(userId: user.user!.uid, email: email),
+      );
+
+      //
+      // firestore.collection('Users').doc(user.user!.uid).set({
+      //   'email': email,
+      //   'uid' : user.user!.uid,
+      //   'createdAt': DateTime.now(),
+      // });
 
       return user;
     } on FirebaseAuthException catch (e) {

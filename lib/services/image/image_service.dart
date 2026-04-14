@@ -4,6 +4,7 @@ import 'package:chat_app/model/images.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 /*
 Different services will use this service to upload and download images
@@ -21,34 +22,36 @@ class ImageService with ChangeNotifier {
   //uploading status
   bool isUploading = false;
 
-
   Future<String> uploadImage(
       LightImageDto imageDto,
-      File file,) async {
-
+      File file,
+      ) async {
     isUploading = true;
     notifyListeners();
-    //
-    // final ImagePicker picker = ImagePicker();
-    // final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    //
-    // if (image == null) throw Exception();
-    //
-    // File file = File(image.path);
 
     try {
-      String filePath = generateImageRef(imageDto.id, imageDto.type);
-      await _firebaseStorage.ref(filePath).putFile(file);
+      final filePath = generateImageRef(imageDto.userId, imageDto.type);
+      final ref = _firebaseStorage.ref().child(filePath);
 
-      var downloadUrl = await _firebaseStorage.ref(filePath).getDownloadURL();
-      notifyListeners();
+      print("Uploading to: $filePath");
+      print("Bucket: ${_firebaseStorage.bucket}");
+
+      final snapshot = await ref.putFile(file);
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+
       return downloadUrl;
-    } catch (e) {
-      throw Exception("Error while uploading image $e");
+    } on FirebaseException catch (e) {
+      print("Firebase upload error: code=${e.code}, message=${e.message}");
+      throw Exception("Error while uploading image: ${e.code} ${e.message}");
+    } finally {
+      isUploading = false;
+      notifyListeners();
     }
   }
 
-  String generateImageRef(String id, ImageType type) {
-    return "$UPLOAD_IMAGE_REF/$type/$id.png";
+  String generateImageRef(String userId, ImageType type) {
+    final id = const Uuid().v4();
+    return "$UPLOAD_IMAGE_REF/$userId/${type.name}/$id.png";
   }
+
 }

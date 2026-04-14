@@ -1,5 +1,7 @@
 import 'package:chat_app/model/message.dart';
+import 'package:chat_app/model/user.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/services/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatServices {
@@ -9,16 +11,12 @@ class ChatServices {
   //firestore instance
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final AuthService _authService = AuthService();
+  final UserDetailsService _userDetailsService = UserDetailsService();
 
   //get user stream
-  Stream<List<Map<String, dynamic>>> getUserStream() {
-    return firestore.collection("Users").snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        final user = doc.data();
-        return user;
-      }).toList();
-    });
-  }
+  Stream<List<UserDetailsDto>> getUserStream() {
+    return _userDetailsService.getUserList();
+     }
 
   //send a message
 
